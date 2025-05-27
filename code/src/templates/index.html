@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Arm Controller</title>
+    <script>
+        let gripperState = 0; // 0 for open, 1 for closed
+
+        function sendCommand() {
+            const angle1 = document.getElementById('angle1').value;
+            const angle2 = document.getElementById('angle2').value;
+            const angle3 = document.getElementById('angle3').value;
+            const angle4 = document.getElementById('angle4').value;
+            const angle5 = document.getElementById('angle5').value;
+
+            fetch('/send_command', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    angle1: angle1,
+                    angle2: angle2,
+                    angle3: angle3,
+                    angle4: angle4,
+                    angle5: angle5,
+                    gripper: gripperState
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.status); // Log the status instead of showing a popup
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function toggleGripper() {
+            gripperState = gripperState === 0 ? 1 : 0; // Toggle gripper state
+            const gripperButton = document.getElementById('gripperButton');
+            gripperButton.textContent = gripperState === 1 ? 'Gripper: Close' : 'Gripper: Open';
+        }
+
+        function resetSliders() {
+            const sliders = document.querySelectorAll('input[type="range"]');
+            sliders.forEach(slider => {
+                slider.value = slider.defaultValue; // Reset to default value
+                const valueSpan = document.getElementById(slider.id + 'Value');
+                valueSpan.textContent = slider.defaultValue; // Update displayed value
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Robot Arm Controller</h1>
+    <div>
+        <label for="angle1">Motor 1:</label>
+        <input type="range" id="angle1" min="-90" max="90" value="0">
+        <span id="angle1Value">90</span>
+    </div>
+    <div>
+        <label for="angle2">Motor 2:</label>
+        <input type="range" id="angle2" min="0" max="180" value="90">
+        <span id="angle2Value">90</span>
+    </div>
+    <div>
+        <label for="angle3">Motor 3:</label>
+        <input type="range" id="angle3" min="0" max="180" value="90">
+        <span id="angle3Value">90</span>
+    </div>
+    <div>
+        <label for="angle4">Motor 4:</label>
+        <input type="range" id="angle4" min="0" max="180" value="90">
+        <span id="angle4Value">90</span>
+    </div>
+    <div>
+        <label for="angle5">Motor 5:</label>
+        <input type="range" id="angle5" min="0" max="180" value="90">
+        <span id="angle5Value">90</span>
+    </div>
+    <div>
+        <button id="gripperButton" onclick="toggleGripper()">Gripper: Open</button>
+    </div>
+    <div>
+        <button onclick="sendCommand()">Send Command</button>
+        <button onclick="resetSliders()">Reset</button>
+    </div>
+
+    <script>
+        const sliders = document.querySelectorAll('input[type="range"]');
+        sliders.forEach(slider => {
+            slider.addEventListener('input', (event) => {
+                const valueSpan = document.getElementById(event.target.id + 'Value');
+                valueSpan.textContent = event.target.value;
+            });
+        });
+    </script>
+</body>
+</html>

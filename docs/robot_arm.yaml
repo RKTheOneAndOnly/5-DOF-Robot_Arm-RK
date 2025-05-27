@@ -1,0 +1,73 @@
+# robot_arm.yaml
+name: Kai - 5DOF Robotic Arm
+version: 2.0
+description: >
+  A modular, 3D-printed 5 Degree-of-Freedom robotic arm designed for pick-and-place operations.
+  Controlled via inverse kinematics and a browser-based interface.
+
+degrees_of_freedom: 5
+
+hardware:
+  microcontroller: ESP32
+  driver:
+    name: PCA9685
+    interface: I2C
+  actuators:
+    - id: base_servo
+      type: MG996R
+      role: Base rotation
+    - id: shoulder_servo
+      type: MG996R
+      role: Shoulder movement
+    - id: elbow_servo
+      type: MG996R
+      role: Elbow movement
+    - id: wrist_servos
+      type: SG90
+      count: 2
+      role: Wrist rotation via gear coupling
+    - id: gripper_servo
+      type: SG90
+      role: Gripper open/close
+  power:
+    source: External 5V DC supply
+    regulated_for: Servos only
+
+software:
+  firmware:
+    language: C++
+    framework: PlatformIO
+    function: Accept joint angle array via serial and validate
+  control_stack:
+    - language: Python
+      modules:
+        - Flask (Web Server)
+        - IkPy (Inverse Kinematics)
+      urdf_path: /code/URDF_FIVE_DOF.urdf
+      functions:
+        - URDF-based IK solving
+        - Web-based interface for real-time control
+        - Serial communication with ESP32
+
+3d_printing:
+  material: PLA
+  parts_count: 10+
+  print_settings:
+    nozzle_diameter: 0.4 mm
+    layer_height: 0.2 mm
+    recommended_infill: Refer to BOM
+  bearings: Yes
+  fasteners: Refer to BOM
+
+links:
+  bom: docs/Bill_of_Materials-5_DOF_Robot.xlsx
+  cad_images: docs/Photos/
+  wiring_diagram: docs/Photos/wiring_diagram.jpg
+  demo_video: docs/Videos/
+  v1_project_repo: https://github.com/RKTheOneAndOnly/Robotics-Arm-Project-V01
+
+license: GPL-3.0
+author:
+  name: Rohith Kini T
+  github: https://github.com/RKTheOneAndOnly
+  email: rohithkini2000@gmail.com

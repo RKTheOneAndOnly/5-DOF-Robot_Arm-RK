@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<robot name="5DOF_Robot_By_Rohith_Kini_T">
+
+<!-- Base Link -->
+<link name="base_link">
+		<visual>
+		    <origin xyz="0 0 22.5" rpy="0 0 0"/>
+			<geometry>
+				<cylinder length="45" radius="50"/>
+			</geometry>
+		</visual>	
+	</link>
+
+<link name="Base_Rotary">
+  <visual>
+    <geometry>
+      <box size="50 50 45" />
+    </geometry>
+  </visual>	
+</link>
+    
+<joint name="Base_Joint" type="revolute">
+  <parent link="base_link"/>
+  <child link="Base_Rotary"/>
+  <origin xyz="0 0 67.5" rpy="0 0 0" />
+  <axis xyz="0 0 1"/>
+  <limit lower="-1.571" upper="1.571"/>
+</joint>
+
+<link name="Arm1">
+  <visual>
+  <origin xyz="0 0 22.5" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="45" radius="15"/>
+    </geometry>
+  </visual>
+</link>
+
+<joint name="Arm1_Rotary" type="revolute">
+  <parent link="Base_Rotary"/>
+  <child link="Arm1"/>
+  <origin xyz="0 0 22.5" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.571" upper="1.571"/>
+</joint>
+
+<link name="Arm2">
+  <visual>
+  <origin xyz="0 0 25" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="50" radius="10"/>
+    </geometry>
+  </visual>
+</link>
+
+<joint name="Arm2_Rotary" type="revolute">
+  <parent link="Arm1"/>
+  <child link="Arm2"/>
+  <origin xyz="0 0 45" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.571" upper="1.571"/>
+</joint>
+
+<link name="Arm3">
+  <visual>
+  <origin xyz="0 0 23" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="46" radius="8"/>
+    </geometry>
+  </visual>
+</link>
+
+<joint name="Arm3_Rotary" type="revolute">
+  <parent link="Arm2"/>
+  <child link="Arm3"/>
+  <origin xyz="0 0 50" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.571" upper="1.571"/>
+</joint>
+
+<link name="Arm4">
+  <visual>
+  <origin xyz="0 0 33.85" rpy="0 0 0"/>
+    <geometry>
+      <box size = "10 10 68.7"/>
+    </geometry>
+  </visual>
+</link>
+
+<joint name="Arm4_Rotary" type="revolute">
+  <parent link="Arm3"/>
+  <child link="Arm4"/>
+  <origin xyz="0 0 46" rpy="0 0 0"/>
+  <axis xyz="0 0 1"/>
+  <limit lower="-1.571" upper="1.571"/>
+</joint>
+
+<link name="Gripper">
+  <visual>
+  <origin xyz="0 0 -10" rpy="0 0 0"/>
+    <geometry>
+      <box size = "20 20 20"/>
+    </geometry>
+  </visual>
+</link>
+
+<joint name ="Gripper" type="fixed">
+  <parent link="Arm4"/>
+  <child link="Gripper"/>
+  <origin xyz="0 0 68.7" rpy="0 0 0"/>
+</joint>
+
+</robot>
